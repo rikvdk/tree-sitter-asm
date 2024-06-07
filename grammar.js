@@ -1,0 +1,78 @@
+module.exports = grammar({
+  name: "asm",
+
+  extras: $ => [
+    /\s|\\\r?\n/,
+    $._comment,
+  ],
+
+  rules: {
+    source_file: $ => repeat($._statement),
+    _statement: $ => choice(
+      $.a_instruction,
+      $.c_instruction,
+      $.label,
+    ),
+    a_instruction: $ => choice(
+      seq("@", $.constant),
+      seq("@", $.symbol),
+    ),
+    c_instruction: $ => seq(
+      optional($.destination),
+      $.compute,
+      optional(seq(";", $.jump)),
+    ),
+    destination: _ => /[ADM]{1,3}=/,
+    equals: _ => "=",
+    compute: _ => choice(
+      "0",
+      "1",
+      "-1",
+      "D",
+      "A",
+      "M",
+      "!D",
+      "!A",
+      "!M",
+      "-D",
+      "-A",
+      "-M",
+      "D+1",
+      "A+1",
+      "M+1",
+      "D-1",
+      "A-1",
+      "M-1",
+      "D+A",
+      "D+M",
+      "D-A",
+      "D-M",
+      "A-D",
+      "M-D",
+      "D&A",
+      "D&M",
+      "D|A",
+      "D|M",
+    ),
+    jump: _ => choice(
+      "JGT",
+      "JEQ",
+      "JGE",
+      "JLT",
+      "JNE",
+      "JLE",
+      "JMP",
+    ),
+    label: $ => seq("(", $.symbol, ")"),
+    constant: _ => /[0-9]+/,
+    symbol: _ => /[a-zA-Z_\.$:][a-zA-Z_.$:\d]*/,
+    _comment: _ => token(choice(
+      seq("//", /(\\+(.|\r?\n)|[^\\\n])*/),
+      seq(
+        "/*",
+        /[^*]*\*+([^/*][^*]*\*+)*/,
+        "/",
+      ),
+    )),
+  }
+});

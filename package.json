@@ -1,0 +1,34 @@
+{
+  "name": "tree-sitter-asm",
+  "version": "1.0.0",
+  "description": "nand2tetris assembly grammar for tree-sitter",
+  "license": "MIT",
+  "author": "Rik van der Kooij",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rikvdk/tree-sitter-asm.git"
+  },
+  "main": "bindings/node",
+  "files": [
+    "grammar.js",
+    "bindings",
+    "binding.gyp",
+    "src",
+    "bin"
+  ],
+  "keywords": [
+    "parser",
+    "tree-sitter",
+    "nand2tetris",
+    "asm"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "nan": "^2.19.0"
+  },
+  "devDependencies": {
+    "tree-sitter-cli": "^0.22.6"
+  }
+}
